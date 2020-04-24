@@ -1,5 +1,9 @@
 [Desktop Entry]
+Type=Application
 Icon=${SNAP}/meta/gui/groovy-gorillas.png
 Name=Groovy Gorillas
 Exec=groovy-gorillas
-
+Comment=GORILLAS.BAS but Groovy
+Terminal=false
+Keywords=groovy;Ubuntu;thefunkiscomin;limegreenshirt
+Categories=Game;
