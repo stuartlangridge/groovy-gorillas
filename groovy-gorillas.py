@@ -90,15 +90,20 @@ GAME_FONT = pygame.font.SysFont(None, 20)
 We will use the default system font at a size of 20 points."""
 
 pygame.mixer.init(frequency=44100)
-BOMB_DROP = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__),
-    "274090__sunch__bombdropexplosion.wav"))
+def lsound(name):
+  "Load sound files either from the folder this file is in, or snap/local"
+  this = os.path.dirname(__file__)
+  local = os.path.join(this, "snap", "local")
+  if os.path.exists(os.path.join(this, name)):
+    return pygame.mixer.Sound(os.path.join(this, name))
+  elif os.path.exists(os.path.join(local, name)):
+    return pygame.mixer.Sound(os.path.join(local, name))
+
+BOMB_DROP = lsound("274090__sunch__bombdropexplosion.wav")
 BOMB_DROP_LENGTH = BOMB_DROP.get_length()
-SMALL_EXPLOSION = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__),
-    "478274__joao-janz__8-bit-explosion-1-1-n.wav"))
-BIG_EXPLOSION = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__),
-    "156031__iwiploppenisse__explosion-n.wav"))
-MUSIC = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__),
-    "msm.ogg"))
+SMALL_EXPLOSION = lsound("478274__joao-janz__8-bit-explosion-1-1-n.wav")
+BIG_EXPLOSION = lsound("156031__iwiploppenisse__explosion-n.wav")
+MUSIC = lsound("msm.ogg")
 MUSIC.play(loops=-1)
 """The pygame.mixer.init() function needs to be called before using sounds.
 We then load the sounds we care about, and define a variable to be the

@@ -3,10 +3,9 @@ base: core18
 version: '1.0'
 summary: Groovy Gorillas
 description: |
-  This is my-snap's description. You have a paragraph or two to tell the
-  most important story about your snap. Keep it under 100 words though,
-  we live in tweetspace and your description wants to look good in the snap
-  store.
+  Groovy Gorillas: a tweak of Al Sweigart's Pygame port of the venerable GORILLAS.BAS,
+  but with the gorillas made to be Groovy in honour of Ubuntu 20.10 Groovy Gorilla!
+  Also, now there is sound.
 
 grade: stable
 confinement: strict
@@ -21,6 +20,9 @@ parts:
       - libglu1-mesa
       - freeglut3
       #- libpulse0
+  assets:
+    plugin: dump
+    source: snap/local
 
 apps:
   groovy-gorillas:
