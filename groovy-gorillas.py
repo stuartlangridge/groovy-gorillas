@@ -109,6 +109,20 @@ MUSIC.play(loops=-1)
 We then load the sounds we care about, and define a variable to be the
 length of the bomb-dropping sound so we can use it later."""
 
+ICON_SNAP = os.path.join(os.path.dirname(__file__),
+  "meta", "gui", "groovy-gorillas.png")
+ICON_LOCAL = os.path.join(os.path.dirname(__file__),
+  "snap", "gui", "groovy-gorillas.png")
+icon = None
+if os.path.exists(ICON_SNAP):
+  icon = ICON_SNAP
+elif os.path.exists(ICON_LOCAL):
+  icon = ICON_LOCAL
+if icon:
+  icon_surf = pygame.image.load(icon)
+  pygame.display.set_icon(icon_surf)
+"""Find our icon and set it as the system icon for this app."""
+
 # orientation of the banana:
 RIGHT = 0
 UP = 1

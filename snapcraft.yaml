@@ -19,7 +19,7 @@ parts:
       - libslang2
       - libglu1-mesa
       - freeglut3
-      #- libpulse0
+      - libpulse0
   assets:
     plugin: dump
     source: snap/local
@@ -27,8 +27,8 @@ parts:
 apps:
   groovy-gorillas:
     command: python2.7 $SNAP/groovy-gorillas.py
-    #environment:
-    #  LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH
+    environment:
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH
     plugs: 
       - x11
-      #- audio-playback
+      - audio-playback
