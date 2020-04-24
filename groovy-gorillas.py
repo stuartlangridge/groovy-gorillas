@@ -123,6 +123,9 @@ if icon:
   pygame.display.set_icon(icon_surf)
 """Find our icon and set it as the system icon for this app."""
 
+pygame.display.set_caption("Groovy Gorillas")
+"""Set the window title."""
+
 # orientation of the banana:
 RIGHT = 0
 UP = 1
@@ -1067,14 +1070,28 @@ def doExplosion(screenSurf, skylineSurf, x, y, explosionSize=BUILD_EXPLOSION_SIZ
 
 
 def main():
-    winSurface = pygame.display.set_mode((SCR_WIDTH, SCR_HEIGHT), 0, 32)
+    winSurfaceDouble = pygame.display.set_mode((SCR_WIDTH * 2, SCR_HEIGHT * 2), 0, 32) 
+    winSurface = pygame.Surface((SCR_WIDTH, SCR_HEIGHT)) 
     """winSurface, being the surface object returned by pygame.display.set_mode(), will be drawn to the screen
     every time pygame.display.update() is called."""
 
     # Uncomment either of the following lines to put the game into full screen mode.
     ##winSurface = pygame.display.set_mode((SCR_WIDTH, SCR_HEIGHT), pygame.FULLSCREEN, 32)
     ##pygame.display.toggle_fullscreen()
-    pygame.display.set_caption('Gorillas.py')
+
+    def _override_update(*args):
+      pygame.transform.scale2x(winSurface, winSurfaceDouble)
+      pygame.display.original_update(*args)
+    pygame.display.original_update = pygame.display.update
+    pygame.display.update = _override_update
+    # Bit of a hack, this; we want to double the size of the game. But the game
+    # calls pygame.display.update() all over the place, which updates the window
+    # surface, and has a load of hardcoded positions which we don't want to edit.
+    # So we create a double-size window surface, and a normal-size surface,
+    # and pass the normal surface around to draw on, and then override p.d.update()
+    # to be our own function, which scales the normal surface up and puts it on the
+    # actual window surface, and so the game is double size.
+
 
     showStartScreen(winSurface)
 
