@@ -1,4 +1,18 @@
-"""Hello, and welcome to the source code of Gorillas.py. This program is meant to be very well documented so that a
+#!/usr/bin/env python2
+"""
+Code based on https://inventwithpython.com/blog/2010/06/25/gorillaspy-a-remake-of-gorillasbas/
+Adapted (slightly) by Stuart Langridge (@sil, kryogenix.org) to have groovy gorillas
+in honour of the Ubuntu 20.10 Groove Gorilla release (and to add sound).
+
+Sounds:
+https://freesound.org/people/Joao_Janz/sounds/478274/
+https://freesound.org/people/Iwiploppenisse/sounds/156031/
+https://freesound.org/people/sunch/sounds/274090/
+https://incompetech.com/music/royalty-free/index.html?isrc=usuan1400011
+
+Original below:
+
+Hello, and welcome to the source code of Gorillas.py. This program is meant to be very well documented so that a
 novice programmer can follow along. This program was written by Al Sweigart as a companion for his free, Creative
 Commons-licensed book "Invent Your Own Computer Games with Python", which is available in full at:
 
@@ -18,7 +32,7 @@ The Pygame documentation is pretty good, and can be found at http://www.pygame.o
 Unfortunately there is no sound with this game.
 """
 
-import pygame, sys, time, random, math
+import pygame, sys, time, random, math, os.path
 from pygame.locals import *
 """We'll import quite a few modules for this game. "pygame" has all the graphics & game-related functions that the
 Pygame game engine provides. "sys" has the exit() function. "time" has the sleep() function. "random" has the randint()
@@ -55,6 +69,7 @@ DARK_RED_COLOR = (173, 0, 0)
 BLACK_COLOR = (0, 0, 0)
 WHITE_COLOR = (255, 255, 255)
 GRAY_COLOR = (173, 170, 173)
+DARK_GRAY_COLOR = (90, 90, 90)
 """Here are a bunch of colors. Pygame uses a tuple of three integers to specify a color. The integers are for the
 amount of Red, Blue, and Green (in order) in the color. This is known as an RGB value.
 
@@ -73,6 +88,21 @@ pygame.init()
 GAME_FONT = pygame.font.SysFont(None, 20)
 """The pygame.init() function needs to be called before calling any of the Pygame functions.
 We will use the default system font at a size of 20 points."""
+
+pygame.mixer.init(frequency=44100)
+BOMB_DROP = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__),
+    "274090__sunch__bombdropexplosion.wav"))
+BOMB_DROP_LENGTH = BOMB_DROP.get_length()
+SMALL_EXPLOSION = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__),
+    "478274__joao-janz__8-bit-explosion-1-1-n.wav"))
+BIG_EXPLOSION = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__),
+    "156031__iwiploppenisse__explosion-n.wav"))
+MUSIC = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__),
+    "msm.ogg"))
+MUSIC.play(loops=-1)
+"""The pygame.mixer.init() function needs to be called before using sounds.
+We then load the sounds we care about, and define a variable to be the
+length of the bomb-dropping sound so we can use it later."""
 
 # orientation of the banana:
 RIGHT = 0
@@ -646,13 +676,16 @@ def showStartScreen(screenSurf):
         """The stars on the sides of the screen move 1 pixel each iteration through this loop and reset every 4
         pixels. The stars on the top and bottom of the screen move 12 pixels each iteration and reset every 84 pixels."""
 
-        drawText('P  y  t  h  o  n     G  O  R  I  L  L  A  S', screenSurf, SCR_WIDTH / 2, 50, WHITE_COLOR, BLACK_COLOR, pos='center')
+        drawText('P y t h o n    G R O O V Y   G O R I L L A S', screenSurf, SCR_WIDTH / 2, 50, WHITE_COLOR, BLACK_COLOR, pos='center')
+        drawText('(for Ubuntu 20.10, Groovy Gorilla edition)', screenSurf, SCR_WIDTH / 2, 75, GRAY_COLOR, BLACK_COLOR, pos='center')
         drawText('Your mission is to hit your opponent with the exploding', screenSurf, SCR_WIDTH / 2, 110, GRAY_COLOR, BLACK_COLOR, pos='center')
         drawText('banana by varying the angle and power of your throw, taking', screenSurf, SCR_WIDTH / 2, 130, GRAY_COLOR, BLACK_COLOR, pos='center')
         drawText('into account wind speed, gravity, and the city skyline.', screenSurf, SCR_WIDTH / 2, 150, GRAY_COLOR, BLACK_COLOR, pos='center')
         drawText('The wind speed is shown by a directional arrow at the bottom', screenSurf, SCR_WIDTH / 2, 170, GRAY_COLOR, BLACK_COLOR, pos='center')
         drawText('of the playing field, its length relative to its strength.', screenSurf, SCR_WIDTH / 2, 190, GRAY_COLOR, BLACK_COLOR, pos='center')
-        drawText('Press any key to continue', screenSurf, SCR_WIDTH / 2, 300, GRAY_COLOR, BLACK_COLOR, pos='center')
+        drawText('Press any key to continue', screenSurf, SCR_WIDTH / 2, 250, WHITE_COLOR, BLACK_COLOR, pos='center')
+        drawText('Music: Monkeys Spinning Monkeys, Kevin MacLeod (incompetech.com)', screenSurf, SCR_WIDTH / 2, 280, DARK_GRAY_COLOR, BLACK_COLOR, pos='center')
+        drawText('Sounds: sunch, Joao_Janz, Iwiploppenisse (freesound.org)', screenSurf, SCR_WIDTH / 2, 300, DARK_GRAY_COLOR, BLACK_COLOR, pos='center')
 
         pygame.display.update()
         GAME_CLOCK.tick(FPS)
@@ -750,7 +783,7 @@ def showSettingsScreen(screenSurf):
 def showIntroScreen(screenSurf, p1name, p2name):
     """This is the screen that plays if the user selected "view intro" from the starting screen."""
     screenSurf.fill(SKY_COLOR)
-    drawText('P  y  t  h  o  n     G  O  R  I  L  L  A  S', screenSurf, SCR_WIDTH / 2, 15, WHITE_COLOR, SKY_COLOR, pos='center')
+    drawText('P y t h o n   G R O O V Y   G O R I L L A S', screenSurf, SCR_WIDTH / 2, 15, WHITE_COLOR, SKY_COLOR, pos='center')
     drawText('STARRING:', screenSurf, SCR_WIDTH / 2, 55, WHITE_COLOR, SKY_COLOR, pos='center')
     drawText('%s AND %s' % (p1name, p2name), screenSurf, SCR_WIDTH / 2, 115, WHITE_COLOR, SKY_COLOR, pos='center')
 
@@ -907,12 +940,14 @@ def plotShot(screenSurf, skylineSurf, angle, velocity, playerNum, wind, gravity,
                 """Note that we draw the explosion on the screen (on screenSurf) and on the separate skyline surface (on skylineSurf).
                 This is done so that bananas won't hit the sun or any text and accidentally think they've hit something. We also want
                 the skylineSurf surface object to keep track of what chunks of the buildings are left."""
+                BIG_EXPLOSION.play()
                 doExplosion(screenSurf, skylineSurf, bananaRect.centerx, bananaRect.centery, explosionSize=int(GOR_EXPLOSION_SIZE*2/3), speed=0.005)
                 doExplosion(screenSurf, skylineSurf, bananaRect.centerx, bananaRect.centery, explosionSize=GOR_EXPLOSION_SIZE, speed=0.005)
                 drawSun(screenSurf)
                 return 'gorilla1'
             elif bananaRect.colliderect(gor2rect):
                 # banana has hit player 2
+                BIG_EXPLOSION.play()
                 doExplosion(screenSurf, skylineSurf, bananaRect.centerx, bananaRect.centery, explosionSize=int(GOR_EXPLOSION_SIZE*2/3), speed=0.005)
                 doExplosion(screenSurf, skylineSurf, bananaRect.centerx, bananaRect.centery, explosionSize=GOR_EXPLOSION_SIZE, speed=0.005)
                 screenSurf.fill(SKY_COLOR, bananaRect) # erase banana
@@ -920,6 +955,7 @@ def plotShot(screenSurf, skylineSurf, angle, velocity, playerNum, wind, gravity,
                 return 'gorilla2'
             elif collideWithNonColor(srcPixArray, screenSurf, bananaRect, SKY_COLOR):
                 # banana has hit a building
+                SMALL_EXPLOSION.play()
                 doExplosion(screenSurf, skylineSurf, bananaRect.centerx, bananaRect.centery)
                 screenSurf.fill(SKY_COLOR, bananaRect) # erase banana
                 drawSun(screenSurf)

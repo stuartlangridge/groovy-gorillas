@@ -1,0 +1,32 @@
+name: groovy-gorillas
+base: core18
+version: '1.0'
+summary: Groovy Gorillas
+description: |
+  This is my-snap's description. You have a paragraph or two to tell the
+  most important story about your snap. Keep it under 100 words though,
+  we live in tweetspace and your description wants to look good in the snap
+  store.
+
+grade: stable
+confinement: strict
+
+parts:
+  groovy-gorillas:
+    plugin: dump
+    source: https://github.com/stuartlangridge/groovy-gorillas.git
+    stage-packages:
+      - python-pygame
+      - libslang2
+      - libglu1-mesa
+      - freeglut3
+      #- libpulse0
+
+apps:
+  groovy-gorillas:
+    command: python2.7 $SNAP/groovy-gorillas.py
+    #environment:
+    #  LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH
+    plugs: 
+      - x11
+      #- audio-playback
